@@ -19,10 +19,8 @@ public class ClientHandler implements Runnable {
                 ObjectOutputStream output = new ObjectOutputStream(clientSocket.getOutputStream())
         ) {
             String command = (String) input.readObject();
-
-            CommandRunner.runCommand(command);
-
-            output.writeObject("Command executed successfully");
+            String result = CommandRunner.runCommand(command);
+            output.writeObject(result);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

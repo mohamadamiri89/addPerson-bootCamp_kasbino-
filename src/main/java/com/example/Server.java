@@ -5,15 +5,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private static final int PORT = 12345;
+    private static final int PORT = 8888;
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Server is listening on port " + PORT);
-
+            System.out.println("Server is listening in port:   " + PORT);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New client connected: " + clientSocket.getInetAddress().getHostAddress());
+                System.out.println("New client connected:   " + clientSocket.getInetAddress().getHostAddress());
 
                 Thread clientThread = new Thread(new ClientHandler(clientSocket));
                 clientThread.start();

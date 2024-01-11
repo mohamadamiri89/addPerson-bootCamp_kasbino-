@@ -4,7 +4,10 @@ import com.example.model.DbConnection;
 import com.example.model.Gender;
 import com.example.model.Person;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,15 +80,32 @@ public class CommandRunner {
         }
         return personListHash;
     }
-    public static void runCommand(String command) {
+    public static String runCommand(String command) {
+        StringBuilder result = new StringBuilder();
         try {
+            // Obtain the absolute path of the resources directory
+            String resourcesPath = new File("src/main/resources").getAbsolutePath();
+
             ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/c", command);
+
+            processBuilder.directory(new File(resourcesPath));
+
             Process process = processBuilder.start();
 
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line).append("\n");
+            }
+
             int exitCode = process.waitFor();
-            System.out.println("Command executed with exit code: " + exitCode);
+            System.out.println("Command executed with exit code: " + exitCode+"   Done!");
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return result.toString();
     }
 }
+
+
